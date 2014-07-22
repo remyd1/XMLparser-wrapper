@@ -224,11 +224,17 @@ def GetProgHelpParam(execline,delimiter):
         else:
             DIALS = "U" #undefined
     interpreter_list = ["bash", "csh", "ksh", "sh", "python", "php", \
-    "perl", "tcsh", "zsh"]
+    "perl", "tcsh", "zsh", "java"]
     progname = execline.split()[0]
+    # check if progname is an iterpreter or the program itself (executable)
     for arg0 in interpreter_list:
         if(progname == arg0):
-            progname = execline.split()[1]
+            # check for dash in next args to see if it is option or
+            # the program name itself
+            for next_arg in execline.split()[1:]:
+                if next_arg[0] != "-":
+                    progname = next_arg
+                    break
             interpreter = arg0
     if interpreter == "":
         filetype = sendcommand("file "+progname)
