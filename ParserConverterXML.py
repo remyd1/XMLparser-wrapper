@@ -47,7 +47,7 @@ if __name__ == "__main__":
             (required)\n\
         -i --filename [/path/to/filename]\n\
         -o --filename [/path/to/filename]\n\
-        -c/-d for h2gw action\n\
+        -c/-d for h2gw | h2p action\n\
         -help\n\
         ParserConverterXML.py <disp|ga2p|p2ga|h2gw|h2p|p2gw|gw2p>"
     epilog = "ParserConverterXML is under Apache license. A beta"\

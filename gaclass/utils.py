@@ -192,7 +192,7 @@ def GetProgHelpParam(execline,delimiter):
             continue
         if generic_opt == "M":
             print arg
-            DIALS = raw_input("Try [[A]]utomatic search ? There is a "+\
+            DIALS = raw_input("Try [[A]]utomatic search ? Is it a "+\
             "[L]ong / [S]hort Option ? Or add this content to "\
             +"general [D]escription or [I]gnore ? [A]|L|S|D|I:")
             if DIALS == "A" or DIALS == "" or DIALS == "U":
