@@ -38,7 +38,7 @@ Of course, just add '-d "your delimiter regexp"'.
 *   What are other options (disp, ga2p, p2ga) ?
 
 
-It is just for display content of a galawy workflow (disp) or for Pise users who would like to convert a Galaxy Workflow into a Pise wrapper (not working for the moment).
+It is just to display the content of a galaxy workflow (disp) or for Pise users who would like to convert a Galaxy Workflow into a Pise wrapper (not working for the moment).
 
 
 

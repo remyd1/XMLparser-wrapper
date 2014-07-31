@@ -158,7 +158,7 @@ def GetProgHelpParam(execline,delimiter):
 
     print "Try to parse default help output from program '%s'" \
     % execline
-    results = sendcommand(execline)
+    results = sanitize(sendcommand(execline))
     print "Output that should be parse : \n\n %s" % results
 
     print "#"*25+"\n\n"+"#"*25
@@ -268,6 +268,8 @@ def GetProgHelpParam(execline,delimiter):
     mybigdict["progfullname"] = progname
     mybigdict["progshortname"] = progshortname
     mybigdict["interpreter"] = interpreter
+    ##for debug
+    #print mybigdict
 
     return mybigdict
 
@@ -369,6 +371,19 @@ def pisewrapper(ListeJsonData, fname):
     '</pise>';
     xmlfile.write(footers)
     xmlfile.close()
+
+
+
+def sanitize(string):
+    charsdict =  {
+    '<': '&lt;',
+    '>': '&gt;',
+    '&': '&amp;',
+    '"': '&quot;'
+    }
+    for k, v in charsdict.iteritems():
+        string = string.replace(k, v)
+    return string
 
 
 
