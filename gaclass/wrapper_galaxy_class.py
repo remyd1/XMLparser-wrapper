@@ -13,7 +13,8 @@ class XmlGW():
     def __init__(self, mybigdict, vprog, vtool):
         if "short_args" in mybigdict:
             self.short_args = mybigdict["short_args"]
-        self.long_args = mybigdict["long_args"]
+        if "long_args" in mybigdict:
+            self.long_args = mybigdict["long_args"]
         self.descrips = mybigdict["descrips_args"]
         self.general_descrip = mybigdict["general_descrip"]
         self.progfullname = mybigdict["progfullname"]
@@ -99,13 +100,15 @@ class XmlGW():
                             "</option>"
                 if not re.search("output",self.descrips[i],re.I):
                     if(self.long_args[i] != ""):
+                        name = re.sub('[!@#$-=]', '', self.long_args[i])
                         content += "\n"+" "*8+"<param name=\""+\
-                        self.long_args[i]+"\" type=\"\" label=\"\" "+\
-                        "help=\""+self.descrips[i]+"\" />"
+                        name+"\" type=\"\" label=\""+self.long_args[i]+\
+                        "\" help=\""+self.descrips[i]+"\" />"
                     else:
-                        content += "\n"+" "*8+"<param name=\""+\
-                        self.short_args[i]+"\" type=\"\" label=\"\" "+\
-                        "help=\""+self.descrips[i]+"\" />"
+                        name = re.sub('[!@#$-=]', '', self.short_args[i])
+                        content += "\n"+" "*8+"<param name=\""+name+\
+                        "\" type=\"\" label=\""+self.short_args[i]+\
+                        "\" help=\""+self.descrips[i]+"\" />"
                 else:
                     j.append(i)
             content += "\n"+" "*4+"</inputs>"

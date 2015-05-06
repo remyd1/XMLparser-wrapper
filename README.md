@@ -32,7 +32,8 @@ Answer 'D' for a block of descriptions.
 
 *   Could I enter specific delimiters to parse my output ?
 
-Of course, just add '-d "your delimiter regexp"'. This delimiter is the equivalent of RS (Record Seperator in awk); it is not a FS (Field separator in awk).
+Of course, just add '-rs "your record separator regexp"' and/or '-fs "your field separator regexp"'.
+Two type of delimiters: RS and FS. There are the same as RS and FS in awk language.
 
 
 *   What are other options (disp, ga2p, p2ga) ?

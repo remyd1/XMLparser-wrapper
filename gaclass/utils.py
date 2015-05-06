@@ -135,11 +135,11 @@ def getinterpreter(filetype):
 
 
 
-def GetProgHelpParam(execline,delimiter):
+def GetProgHelpParam(execline,record_separator,field_separator):
     """
     Try to parse the Help section of a program stdout
     < Get a command line to execute [Help section of this program]
-    < Get a delimiter (eventually a regexp)
+    < Get one or two delimiter (eventually a regexp) for RS and FS
     > Return the list of short/(eventually)long arguments
     > Return eventually a description of each argument and a general
     description of the program
@@ -151,28 +151,41 @@ def GetProgHelpParam(execline,delimiter):
     descrips = []
     general_descrip = []
     interpreter = ""
-    DIALS = "U" #undefined option
-    std_help_pattern = re.compile(r"^((?P<short>\w{1})?,?(\s)+"+\
-    "(--?(?P<long>(\w)+)(\s)+)?)?(?P<descrip>((.+(\n|\r\n?)?)"+\
-    "*))", re.M|re.U|re.I)
+    # initialize dialup with undefined option
+    DIALS = "U"
+
+    sep_r = re.compile(record_separator,flags=re.U)
+    sep_f = re.compile(field_separator,flags=re.U)
+    fs = field_separator
+
+    #std_help_pattern = re.compile(r"^((?P<short>\w{1})?,?(\s)+"+\
+    #"(--?(?P<long>(\w)+)(\s)+)?)?(?P<descrip>((.+(\n|\r\n?)?)"+\
+    #"*))", re.M|re.U|re.I)
+    std_help_pattern = re.compile(r"^(?P<short>\w{1,3},?" + fs + ")?"+\
+    "(--?(?P<long>\w+([-=]?(\w+)?)*)" + fs + ")?(?P<descrip>((.+"+\
+    "(\n|\r\n?)?)*))", re.M|re.U|re.I)
 
     print "Try to parse default help output from program '%s'" \
     % execline
     results = sanitize(sendcommand(execline))
     print "Output that should be parse : \n\n %s" % results
 
-    print "#"*25+"\n\n"+"#"*25
-    generic_opt = raw_input("Try [A]utomatic search (ok for well "+\
-    "formatted help stdout like 'ls --help'). If there is short"+\
-    " and long options available, you will have to choose '[M]ixes' "+\
-    "to check each output. Otherwise, if you have _only_ [-]short + "+\
-    "[--]long options + description behind, choose 'L' (for [L]ong). "+\
-    "If you have only [S]hort options, choose 'S'. [M]ixes choices "+\
-    "allow also you to add general description.\n [A]|L|S|M:")
-    sep = re.compile(delimiter,flags=re.U)
-    argsarray = re.split(sep,results)
+    print "\n\n"+"#"*25+"\n\n"
+
+    generic_opt = raw_input("\nTry [A]utomatic search (ok for well "+\
+    "formatted help). If there is short (e.g. -f) and long options "+\
+    "available (e.g. --file), you will have to choose [M]anual "+\
+    "to check each output. If you have only [L]ong options, e.g. "+\
+    "--myoption, choose [L]ong options.\n" +\
+    "If you have only [S]hort options, choose 'S'. [M]anual choices "+\
+    "also allow you to add general description.\n [A]|L|S|M:")
+
+    argsarray = re.split(sep_r,results)
+
+    print "\n\n"+"#"*25+"\n\n"
     for arg in argsarray:
-        the_option = arg.split()
+        #the_option = arg.split()
+        the_option = re.split(sep_f,arg)
         """
         generic_opt is automatic -> Same as bellow without asking
         anything
@@ -182,43 +195,67 @@ def GetProgHelpParam(execline,delimiter):
             results = content_in_arg.groupdict()
             if results:
                 if results['short']:
-                    short_args.append("-"+results['short'])
+                    short_o = "-" + results['short'].strip(' ,;')
+                    short_args.append(short_o)
+                else:
+                    short_args.append("")
                 if results['long']:
-                    long_args.append("--"+results['long'])
+                    long_o = "--" + results['long'].strip(' ,;')
+                    long_args.append(long_o)
                 else:
                     long_args.append("")
                 if results['descrip']:
                     descrips.append(results['descrip'])
+                else:
+                    descrips.append("")
             continue
         if generic_opt == "M":
             print arg
-            DIALS = raw_input("Try [[A]]utomatic search ? Is it a "+\
-            "[L]ong / [S]hort Option ? Or add this content to "\
+            DIALS = raw_input("\n\nTry [A]utomatic search ? Is it a "+\
+            "[L]ong / [S]hort Option (the important part is the "+\
+            "beginning of the line)? Or add this content to "\
             +"general [D]escription or [I]gnore ? [A]|L|S|D|I:")
             if DIALS == "A" or DIALS == "" or DIALS == "U":
                 content_in_arg = std_help_pattern.search(arg)
                 results = content_in_arg.groupdict()
                 if results:
                     if results['short']:
-                        short_args.append("-"+results['short'])
+                        short_o = "-" + results['short'].strip(' ,;')
+                        short_args.append(short_o)
+                    else:
+                        short_args.append("")
                     if results['long']:
-                        long_args.append("--"+results['long'])
+                        long_o = "--" + results['long'].strip(' ,;')
+                        long_args.append(long_o)
                     else:
                         long_args.append("")
                     if results['descrip']:
                         descrips.append(results['descrip'])
+                    else:
+                        descrips.append("")
                 continue
         if(DIALS != "D" and DIALS != "I"):
             try:
-                short_args.append("-"+the_option[0])
-                if(generic_opt == "L") or (DIALS == "L"):
+                first_opt = the_option[0]
+                if len(the_option) >= 3:
+                    short_args.append("-"+first_opt)
                     long_args.append(the_option[1])
                     descrips.append(" ".join(the_option[2:]))
+                elif len(the_option) == 2:
+                    if(generic_opt == "L") or (DIALS == "L"):
+                        short_args.append("")
+                        long_args.append(first_opt)
+                        descrips.append(" ".join(the_option[1:]))
+                    elif(generic_opt == "S") or (DIALS == "S"):
+                        short_args.append("-"+first_opt)
+                        long_args.append("")
+                        descrips.append(" ".join(the_option[1:]))
                 else:
                     descrips.append(" ".join(the_option[1:]))
                     long_args.append("")
+                    short_args.append("")
             except:
-                print "bad delimiter... ?!!"
+                print "Warning: Bad field separator ?!!"
         elif(DIALS == "D"):
             general_descrip.append(arg)
         else:
@@ -269,7 +306,8 @@ def GetProgHelpParam(execline,delimiter):
     mybigdict["progshortname"] = progshortname
     mybigdict["interpreter"] = interpreter
     ##for debug
-    #print mybigdict
+
+    print mybigdict
 
     return mybigdict
 

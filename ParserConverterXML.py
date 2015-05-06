@@ -111,9 +111,14 @@ if __name__ == "__main__":
     h2gw.add_argument("-c", "--commandline", required = True, \
     help= "Your command line "\
     +"to parse; Usually 'yourbinaryprogram --help' or '-h'")
-    h2gw.add_argument("-d", "--delimiter", \
-    help = "Delimiter is a string that seperate arguments. It could "\
-    +"be a regular expression", default = "\n\s+-")
+    h2gw.add_argument("-rs", "--record_separator", \
+    help = "Record separator is a string that seperate each line of "+\
+    "arguments. It could be a regular expression. Default value is "+\
+    "a regexp: '\\n\\s+-'.", default = "\n\s+-")
+    h2gw.add_argument("-fs", "--field_separator", \
+    help = "Field separator is a string that seperate each option and"+\
+    " description within a line of help. It could be a regular "+\
+    "expression. Default value is a regexp: '\\s+'.", default = "\s+")
     h2gw.set_defaults(command = 'h2gw')
 
     h2p = subparsers.add_parser('h2p', help="retrieve arguments "\
@@ -125,9 +130,14 @@ if __name__ == "__main__":
     h2p.add_argument("-c", "--commandline", required = True, \
     help = "Your command line "\
     +"to parse; Usually 'yourbinaryprogram --help' or '-h'")
-    h2p.add_argument("-d", "--delimiter", \
-    help = "Delimiter is a string that seperate arguments. It could "\
-    +"be a regular expression", default = "\n\s+-")
+    h2p.add_argument("-rs", "--record_separator", \
+    help = "Record separator is a string that seperate each line of "+\
+    "arguments. It could be a regular expression. Default value is "+\
+    "a regexp: '\\n\\s+-'.", default = "\n\s+-")
+    h2p.add_argument("-fs", "--field_separator", \
+    help = "Field separator is a string that seperate each option and"+\
+    " description within a line of help. It could be a regular "+\
+    "expression. Default value is a regexp: '\\s+'.", default = "\s+")
     h2p.set_defaults(command = 'h2p')
 
     args = parser.parse_args()
@@ -231,11 +241,16 @@ if __name__ == "__main__":
             execline = args.commandline
             outfile = args.output
             try:
-                if(delimiter):
-                    delimiter = args.delimiter
+                if(record_separator):
+                    record_separator = args.record_separator
             except:
-                delimiter = "\n\s+-"
-            mybigdict = GetProgHelpParam(execline,delimiter)
+                record_separator = "\n\s+-"
+            try:
+                if(field_separator):
+                    field_separator = args.field_separator
+            except:
+                field_separator = "\s+"
+            mybigdict = GetProgHelpParam(execline,record_separator,field_separator)
             vprog, vtool = GetVersion(mybigdict["progfullname"])
             GalaxWrapperObj = XmlGW(mybigdict,vprog,vtool)
             GalaxWrapper = GalaxWrapperObj.GenGalaxWrapper(fromwrapper)
@@ -248,11 +263,16 @@ if __name__ == "__main__":
             execline = args.commandline
             outfile = args.output
             try:
-                if(delimiter):
-                    delimiter = args.delimiter
+                if(record_separator):
+                    record_separator = args.record_separator
             except:
-                delimiter = "\n\s+-"
-            mybigdict = GetProgHelpParam(execline,delimiter)
+                record_separator = "\n\s+-"
+            try:
+                if(field_separator):
+                    field_separator = args.field_separator
+            except:
+                field_separator = "\s+"
+            mybigdict = GetProgHelpParam(execline,record_separator,field_separator)
             vprog, vtool = GetVersion(mybigdict["progfullname"])
             catname = raw_input("In what category would you like to "+\
             "include this Tool[[NGS]|Phylogenomics|Population "+\
