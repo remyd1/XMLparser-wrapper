@@ -33,7 +33,7 @@ class JsonData():
         display data
         """
         for line in text:
-            print line+"\n"
+            print(line+"\n")
 
 
 

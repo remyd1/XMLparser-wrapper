@@ -16,11 +16,11 @@ def parseXml(xmlfile):
     root = tree.getroot()
     mybigdict = {}
     if root.tag == "pise":
-        print "#"*20+" Wrapper Pise "+"#"*20
+        print("#"*20+" Wrapper Pise "+"#"*20)
         mybigdict = getPiseElement(tree)
         endtext = "#"*20+" [ End Wrapper Pise ] "+"#"*20
     elif root.tag == "tool":
-        print "#"*20+" Wrapper Galaxy "+"#"*20
+        print("#"*20+" Wrapper Galaxy "+"#"*20)
         mybigdict = getGalaxyElement(tree,root)
         endtext = "#"*20+" [ End Wrapper Galaxy ]"+"#"*20
     else:
@@ -31,7 +31,7 @@ def parseXml(xmlfile):
     if not mybigdict.has_key("vtool"):
         mybigdict["vtool"] = "0"
     #ppty.pprint(mybigdict)
-    #print endtext
+    #print(endtext)
     return mybigdict
 
 
@@ -68,15 +68,15 @@ def getGalaxyElement(tree,root):
         elif elem.tag == "inputs":
             sub_elems["inputs"].append(parse_galaxy_sub_elem(elem))
             ## debug
-            #print "elem" + str(ET.dump(elem))
+            #print("elem" + str(ET.dump(elem)))
         elif elem.tag == "outputs":
             sub_elems["outputs"].append(parse_galaxy_sub_elem(elem))
         #mybigdict["progshortname"] = baseprog
     mybigdict['sub_elems'] = sub_elems
     # debug
-    #print type(mybigdict['sub_elems']["inputs"][0])
+    #print(type(mybigdict['sub_elems']["inputs"][0]))
     #pp.pprint(mybigdict['sub_elems']["inputs"][0])
-    #print type(mybigdict['sub_elems']["outputs"][0])
+    #print(type(mybigdict['sub_elems']["outputs"][0]))
     #pp.pprint(mybigdict['sub_elems']["outputs"][0])
     return mybigdict
 
@@ -176,8 +176,8 @@ def parse_galaxy_sub_elem(elem):
                     mydict[elem.tag][name]["long_args"] = name
                 else:
                     # Is that possible ?
-                    print "An input sub element has no name " + \
-                    str(ET.dump(subelem))
+                    print("An input sub element has no name " + \
+                    str(ET.dump(subelem)))
                     continue
                 if "help" in subelem.attrib:
                     mydict[elem.tag][name]["descrips_args"] = subelem.\
@@ -217,8 +217,8 @@ def parse_galaxy_sub_elem(elem):
                 elif subelem.attrib["type"] == "boolean":
                     mydict[elem.tag][name]["boolean"] = True
             elif subelem.tag == "conditional" or subelem.tag == "when":
-                print "A conditional/when tag has been detected! "+\
-                "There is no equivalent in Pise!"
+                print("A conditional/when tag has been detected! "+\
+                "There is no equivalent in Pise!")
 
     elif elem.tag == "outputs":
         mydict[elem.tag] = {}
@@ -230,8 +230,8 @@ def parse_galaxy_sub_elem(elem):
                     mydict[elem.tag][name] = {}
                     mydict[elem.tag][name]["long_args"] = name
                 else:
-                    print "An output sub element has no name " + \
-                    str(ET.dump(subelem))
+                    print("An output sub element has no name " + \
+                    str(ET.dump(subelem)))
                     continue
             if "format" in subelem.attrib:
                 # format is text or exotic type from datatypes_conf.xml

@@ -147,12 +147,12 @@ class XmlPise():
         if self.sub_elems is not None:
             # sub_elem is a dict containing lists
             if (len(self.sub_elems["inputs"]) > 0):
-                #print type(self.sub_elems["inputs"])
+                #print(type(self.sub_elems["inputs"]))
                 for inputs in self.sub_elems["inputs"]:
                     if not inputs.has_key("inputs"):
                         continue
                     for the_input in inputs["inputs"].itervalues():
-                        #print type(the_input)
+                        #print(type(the_input))
                         #pp.pprint(the_input)
                         if the_input:
                             group = group + 1
@@ -179,7 +179,7 @@ class XmlPise():
                                 subelems_content += "<name>"+\
                                 the_input["long_args"]+"</name>\n"
                             except:
-                                print "An input has no name! "
+                                print("An input has no name! ")
                                 pp.pprint(the_input)
                                 continue
                             subelems_content += ' '*6
@@ -216,8 +216,8 @@ class XmlPise():
                                         subelems_content += ' '*10+\
                                         "<label>"+vlist_label+"</label>\n"
                                     except:
-                                        print "No label for vlist value: "+\
-                                        vlist_value
+                                        print("No label for vlist value: "+\
+                                        vlist_value)
                                 subelems_content += ' '*8+"</vlist>\n"
                             if the_input.has_key("value"):
                                 subelems_content += ' '*8
@@ -243,7 +243,7 @@ class XmlPise():
                                 subelems_content += "<name>"+\
                                 the_output["long_args"]+"</name>\n"
                             except:
-                                print "An output has no name! "
+                                print("An output has no name! ")
                                 pp.pprint(the_output)
                                 continue
                             subelems_content += ' '*4

@@ -143,8 +143,11 @@ class XmlGW():
                 # argparse.Filetype open files in binary mode.
                 # need python 3 to open files with utf-8 codecs
                 # directly from argparse
-                content += '\n'+gdescrip.encode('ascii', 'replace').\
-                strip()
+                try:
+                    content += '\n'+gdescrip.encode('ascii', 'replace').\
+                    strip()
+                except:
+                    content += '\n'+gdescrip.strip()
         content += "\n"+" "*4+"</help>"
         content += "\n</tool>"
         return content

@@ -167,28 +167,28 @@ if __name__ == "__main__":
 
     if(args.command == "disp"):
         jsondata = getjson(infile)
-        print "Processing workflow params..."
+        print("Processing workflow params...")
         if(jsondata):
             ListeJsonData = ConstructMyGaParser(jsondata)
             getworkflowparams(ListeJsonData)
         else:
-            print "jsondata is not defined"
+            print("jsondata is not defined")
     elif(args.command == "ga2p"):
         jsondata = getjson(infile)
-        print "Converting to Pise XML..."
+        print("Converting to Pise XML...")
         if(jsondata):
             ListeJsonData = ConstructMyGaParser(jsondata)
             if outfile is False:
                 pisewrapper(ListeJsonData, fname+".xml")
-                print "The XML file is located in the same directory "\
-                +"as your original ga file, with the same name."
+                print("The XML file is located in the same directory "\
+                +"as your original ga file, with the same name.")
             else:
                 pisewrapper(ListeJsonData, outfile)
         else:
-            print "jsondata is not defined"
+            print("jsondata is not defined")
     elif(args.command == "p2gw"):
         fromwrapper = True
-        print "Converting Pise XML to galaxy XML..."
+        print("Converting Pise XML to galaxy XML...")
         mybigdict = parseXml(infile)
         vprog = mybigdict["vprog"]
         vtool = mybigdict["vtool"]
@@ -210,7 +210,7 @@ if __name__ == "__main__":
         "select / data_ref) ")
     elif(args.command == "gw2p"):
         fromwrapper = True
-        print "Converting Galaxy XML to Pise XML..."
+        print("Converting Galaxy XML to Pise XML...")
         mybigdict = parseXml(infile)
         vtool = mybigdict["vtool"]
         vprog = raw_input("Please give me the program version:")
@@ -235,7 +235,7 @@ if __name__ == "__main__":
         outfile.write(PiseWrapperFormat)
         outfile.close()
     elif(args.command == "p2ga"):
-        print "Converting Pise XML to galaxy file..."
+        print("Converting Pise XML to galaxy file...")
     elif(args.command == "h2gw"):
         if(args.commandline):
             execline = args.commandline

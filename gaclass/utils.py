@@ -54,7 +54,7 @@ def getjson(infile):
             sys.exit("Not a json file !! Bye bye...")
     #except Exception as e:
         #top = traceback.extract_stack()[-1]
-        #print ', '.join([type(e).__name__, os.path.basename(top[0]), str(top[1])])
+        #print(', '.join([type(e).__name__, os.path.basename(top[0]), str(top[1])]))
     except:
         sys.exit("Your file is not a text file readable !! Bye "+\
         "bye...")
@@ -81,28 +81,28 @@ def getworkflowparams(ListeJsonData):
         ttool_errors = JsonData.ttool_errors
 
         if(ttool_errors is None):
-            print "id : "+str(step_id)
-            print "tool name : "+tname
+            print("id : "+str(step_id))
+            print("tool name : "+tname)
             if(ttool_id is not None):
-                print "tool_id : " +ttool_id
-            print "type : " +ttype
+                print("tool_id : " +ttool_id)
+            print("type : " +ttype)
             if(ttool_version is not None):
-                print "version : " +ttool_version
+                print("version : " +ttool_version)
             if(tinput_name):
-                print "Input : "
+                print("Input : ")
                 JsonData.ParseInOutVal(tinput_name,"input",aff)
             if(toutput_name):
-                print "Output : "
+                print("Output : ")
                 JsonData.ParseInOutVal(toutput_name,"output",aff)
             if(ttype == "tool"):
-                print "#"*40
+                print("#"*40)
                 #params_tools = ttool_state.replace("\\","")
                 #params_tools = eval(ttool_state)
                 params_tools = json.loads(ttool_state)
                 JsonData.ParseParams(params_tools, aff)
-            print "\n\n"
+            print("\n\n")
         else:
-            print "This tool is in error state" +tname
+            print("This tool is in error state" +tname)
 
 
 
@@ -154,6 +154,24 @@ def GetProgHelpParam(execline,record_separator,field_separator):
     # initialize dialup with undefined option
     DIALS = "U"
 
+    first_message = "\n   Try [A]utomatic search (ok for well "+\
+    "formatted help). If there is short (e.g. -f) and long options "+\
+    "available (e.g. --file), you will have to choose [M]anual, "+\
+    "to check each output.\n If you have only [L]ong options, e.g. "+\
+    "--myoption, choose [L]ong options.\n" +\
+    " If you have only [S]hort options, choose 'S'.\n"+\
+    " Please note that [A]utomatic search could overwrite your field "+\
+    "separator.\n" +\
+    " [M]anual choices also allow you to add general description.\n"+\
+    "    [A]|L|S|M:"
+
+    each_dial = "#"*12+"\n   Try [A]utomatic search (could overwrite"+\
+    " your separator) ? Or, is it a [L]ong or a [S]hort Option (the "+\
+    "important part is the beginning of the line; Short option is less"+\
+    " than 3 character) ? Or add this "+\
+    "content to the general [D]escription ? Or [I]gnore ? \n"+\
+    "    [A]|L|S|D|I:"
+
     sep_r = re.compile(record_separator,flags=re.U)
     sep_f = re.compile(field_separator,flags=re.U)
     fs = field_separator
@@ -165,24 +183,18 @@ def GetProgHelpParam(execline,record_separator,field_separator):
     "(--?(?P<long>\w+([-=]?(\w+)?)*)" + fs + ")?(?P<descrip>((.+"+\
     "(\n|\r\n?)?)*))", re.M|re.U|re.I)
 
-    print "Try to parse default help output from program '%s'" \
-    % execline
+    print("Try to parse default help output from program '%s'" \
+    % execline)
     results = sanitize(sendcommand(execline))
-    print "Output that should be parse : \n\n %s" % results
+    print("\n\n"+"#"*25+"\n")
+    print("Output that should be parse : \n\n"+"#"*25+"\n %s" % results)
+    print("\n"+"#"*25+"\n\n")
 
-    print "\n\n"+"#"*25+"\n\n"
-
-    generic_opt = raw_input("\nTry [A]utomatic search (ok for well "+\
-    "formatted help). If there is short (e.g. -f) and long options "+\
-    "available (e.g. --file), you will have to choose [M]anual "+\
-    "to check each output. If you have only [L]ong options, e.g. "+\
-    "--myoption, choose [L]ong options.\n" +\
-    "If you have only [S]hort options, choose 'S'. [M]anual choices "+\
-    "also allow you to add general description.\n [A]|L|S|M:")
+    generic_opt = raw_input(first_message)
 
     argsarray = re.split(sep_r,results)
 
-    print "\n\n"+"#"*25+"\n\n"
+    print("\n\n"+"#"*25+"\n\n")
     for arg in argsarray:
         #the_option = arg.split()
         the_option = re.split(sep_f,arg)
@@ -210,11 +222,10 @@ def GetProgHelpParam(execline,record_separator,field_separator):
                     descrips.append("")
             continue
         if generic_opt == "M":
-            print arg
-            DIALS = raw_input("\n\nTry [A]utomatic search ? Is it a "+\
-            "[L]ong / [S]hort Option (the important part is the "+\
-            "beginning of the line)? Or add this content to "\
-            +"general [D]escription or [I]gnore ? [A]|L|S|D|I:")
+            print("\n\n"+"#"*12+"\n")
+            print(arg)
+            print("\n")
+            DIALS = raw_input(each_dial)
             if DIALS == "A" or DIALS == "" or DIALS == "U":
                 content_in_arg = std_help_pattern.search(arg)
                 results = content_in_arg.groupdict()
@@ -255,7 +266,7 @@ def GetProgHelpParam(execline,record_separator,field_separator):
                     long_args.append("")
                     short_args.append("")
             except:
-                print "Warning: Bad field separator ?!!"
+                print("Warning: Bad field separator ?!!")
         elif(DIALS == "D"):
             general_descrip.append(arg)
         else:
@@ -277,21 +288,21 @@ def GetProgHelpParam(execline,record_separator,field_separator):
         filetype = sendcommand("file "+progname)
         interpreter = getinterpreter(filetype)
     progshortname = os.path.basename(progname)
-    print progshortname
-    print interpreter
+    print(progshortname)
+    print(interpreter)
 
-    print "\n"+"#"*25+"\n"
+    print("\n"+"#"*25+"\n")
     for value in short_args:
-        print "\t"+value
-    print "\n"+"#"*25+"\n"
+        print("\t"+value)
+    print("\n"+"#"*25+"\n")
     for long_value in long_args:
-        print "\t"+long_value
-    print "\n"+"#"*25+"\n"
+        print("\t"+long_value)
+    print("\n"+"#"*25+"\n")
     for descrip in descrips:
-        print "\t"+descrip
-    print "\n"+"#"*25+"\n"
+        print("\t"+descrip)
+    print("\n"+"#"*25+"\n")
     for g_descrip in general_descrip:
-        print "\t"+g_descrip
+        print("\t"+g_descrip)
 
     mybigdict = {}
     mybigdict["short_args"] = []
@@ -306,8 +317,7 @@ def GetProgHelpParam(execline,record_separator,field_separator):
     mybigdict["progshortname"] = progshortname
     mybigdict["interpreter"] = interpreter
     ##for debug
-
-    print mybigdict
+    #print(mybigdict)
 
     return mybigdict
 
@@ -357,7 +367,7 @@ def pisewrapper(ListeJsonData, fname):
     "<!DOCTYPE pise SYSTEM \"PARSER/pise.dtd\">\n"
 
     for JsonData in ListeJsonData:
-        #print str(JsonData)
+        #print(str(JsonData))
         wn = JsonData.wn
         ann = JsonData.ann
         step_id = JsonData.step_id
