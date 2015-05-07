@@ -136,7 +136,7 @@ def getinterpreter(filetype):
 
 
 
-def GetProgHelpParam(execline, record_separator, field_separator):
+def GetProgHelpParam(execline, record_separator, field_separator, fromfile):
     """
     Try to parse the Help section of a program stdout
     < Get a command line to execute [Help section of this program]
@@ -176,19 +176,18 @@ def GetProgHelpParam(execline, record_separator, field_separator):
     sep_f = re.compile(field_separator, flags=re.U)
     fs = field_separator
 
-    #std_help_pattern = re.compile(r"^((?P<short>\w{1})?,?(\s)+"+\
-    #"(--?(?P<long>(\w)+)(\s)+)?)?(?P<descrip>((.+(\n|\r\n?)?)"+\
-    #"*))", re.M|re.U|re.I)
     std_help_pattern = re.compile(r"^(?P<short>\w+,?" + fs + ")?"+\
     "(--?(?P<long>\w+([-=]?(\w+)?)*)" + fs + ")?(?P<descrip>((.+"+\
     "(\n|\r\n?)?)*))", re.M|re.U|re.I)
 
-    print("Try to parse default help output from program '%s'" \
-    % execline)
-    # some problems with "<" or ">" because we need to generate a xml
-    # content
-    results = sanitize(sendcommand(execline))
-    #results = sendcommand(execline)
+    if fromfile is False:
+        print("Try to parse default help output from program '%s'" \
+        % execline)
+        # some problems with "<" or ">" because we need to generate a xml
+        # content
+        results = sanitize(sendcommand(execline))
+    else:
+        results = execline
     print("\n\n"+"#"*25+"\n")
     print("Output that should be parse : \n\n"+"#"*25+"\n %s" % results)
     print("\n"+"#"*25+"\n\n")

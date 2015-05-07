@@ -108,9 +108,15 @@ if __name__ == "__main__":
     h2gw.add_argument('-o', '--output', required=True, \
     type=argparse.FileType('wb', 0), help="Galaxy "+\
     "filename to create")
-    h2gw.add_argument("-c", "--commandline", required=True, \
-    help="Your command line "\
-    +"to parse; Usually 'yourbinaryprogram --help' or '-h'")
+    fileorcmdgw = h2gw.add_mutually_exclusive_group(required=True)
+    fileorcmdgw.add_argument("-i", "--input", type=argparse.FileType('r'), \
+    help="A help file "\
+    +"to parse; Usually 'yourbinaryprogram --help' or '-h'. "+\
+    "Can not be used with -c")
+    fileorcmdgw.add_argument("-c", "--commandline", \
+    help="Your command line "+\
+    "to parse; Usually 'yourbinaryprogram --help' or '-h'. "+\
+    "Can not be used with -i")
     h2gw.add_argument("-rs", "--record_separator", \
     help="Record separator is a string that seperate each line of "+\
     "arguments. It could be a regular expression. Default value is "+\
@@ -127,9 +133,15 @@ if __name__ == "__main__":
     h2p.add_argument('-o', '--output', required=True, \
     type=argparse.FileType('wb', 0), help="Pise "+\
     "filename to create")
-    h2p.add_argument("-c", "--commandline", required=True, \
+    fileorcmdp = h2p.add_mutually_exclusive_group(required=True)
+    fileorcmdp.add_argument("-i", "--input", type=argparse.FileType('r'), \
+    help="A help file "\
+    +"to parse; Usually 'yourbinaryprogram --help' or '-h'. "+\
+    "Can not be used with -c")
+    fileorcmdp.add_argument("-c", "--commandline", \
     help="Your command line "\
-    +"to parse; Usually 'yourbinaryprogram --help' or '-h'")
+    +"to parse; Usually 'yourbinaryprogram --help' or '-h'. "+\
+    "Can not be used with -i")
     h2p.add_argument("-rs", "--record_separator", \
     help="Record separator is a string that seperate each line of "+\
     "arguments. It could be a regular expression. Default value is "+\
@@ -146,6 +158,7 @@ if __name__ == "__main__":
     jsondata = False
     fromwrapper = False
 
+    infile = False
     try:
         if args.input:
             infile = args.input
@@ -164,6 +177,7 @@ if __name__ == "__main__":
             outfile = args.output
     except:
         outfile = False
+
 
     if args.command == "disp":
         jsondata = getjson(infile)
@@ -186,6 +200,7 @@ if __name__ == "__main__":
                 pisewrapper(ListeJsonData, outfile)
         else:
             print("jsondata is not defined")
+
     elif args.command == "p2gw":
         fromwrapper = True
         print("Converting Pise XML to galaxy XML...")
@@ -211,6 +226,7 @@ if __name__ == "__main__":
             "select / data_ref) ")
         else:
             sys.exit("No output file found!")
+
     elif args.command == "gw2p":
         fromwrapper = True
         print("Converting Galaxy XML to Pise XML...")
@@ -240,34 +256,47 @@ if __name__ == "__main__":
             outfile.close()
         else:
             sys.exit("No output file found!")
+
     elif args.command == "p2ga":
         print("Converting Pise XML to galaxy file...")
+
     elif args.command == "h2gw":
+        """
+        Help to Galaxy Wrapper
+        """
+        if not outfile:
+            sys.exit("No output file found!")
+        else:
+            outfile = args.output
         if args.commandline:
             execline = args.commandline
-            outfile = args.output
-            try:
-                if args.record_separator:
-                    record_separator = args.record_separator
-            except:
-                record_separator = "\n\s+-"
-            try:
-                if args.field_separator:
-                    field_separator = args.field_separator
-            except:
-                field_separator = "\s+"
-            mybigdict = GetProgHelpParam(execline, record_separator, \
-            field_separator)
-            vprog, vtool = GetVersion(mybigdict["progfullname"])
-            GalaxWrapperObj = XmlGW(mybigdict, vprog, vtool)
-            GalaxWrapper = GalaxWrapperObj.GenGalaxWrapper(fromwrapper)
-            if outfile:
-                outfile.write(GalaxWrapper)
-                outfile.close()
-            else:
-                sys.exit("No output file found!")
+        elif infile:
+            content = infile.read()
+            infile.close()
         else:
-            sys.exit("No command line given... Bye bye...")
+            sys.exit("No command line or help file given... Bye bye...")
+        try:
+            if args.record_separator:
+                record_separator = args.record_separator
+        except:
+            record_separator = "\n\s+-"
+        try:
+            if args.field_separator:
+                field_separator = args.field_separator
+        except:
+            field_separator = "\s+"
+        if infile:
+            mybigdict = GetProgHelpParam(content, record_separator, \
+            field_separator, True)
+        else:
+            mybigdict = GetProgHelpParam(execline, record_separator, \
+            field_separator, False)
+        vprog, vtool = GetVersion(mybigdict["progfullname"])
+        GalaxWrapperObj = XmlGW(mybigdict, vprog, vtool)
+        GalaxWrapper = GalaxWrapperObj.GenGalaxWrapper(fromwrapper)
+        outfile.write(GalaxWrapper)
+        outfile.close()
+
     elif args.command == "h2p":
         if args.commandline:
             execline = args.commandline
@@ -283,7 +312,7 @@ if __name__ == "__main__":
             except:
                 field_separator = "\s+"
             mybigdict = GetProgHelpParam(execline, record_separator, \
-            field_separator)
+            field_separator, False)
             vprog, vtool = GetVersion(mybigdict["progfullname"])
             catname = raw_input("In what category would you like to "+\
             "include this Tool[[NGS]|Phylogenomics|Population "+\
