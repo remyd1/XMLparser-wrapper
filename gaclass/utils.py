@@ -168,8 +168,7 @@ def GetProgHelpParam(execline, record_separator, field_separator):
 
     each_dial = "#"*12+"\n   Try [A]utomatic search (could overwrite"+\
     " your separator) ? Or, is it a [L]ong or a [S]hort Option (the "+\
-    "important part is the beginning of the line; Short option is less"+\
-    " than 3 character) ? Or add this "+\
+    "important part is the beginning of the line) ? Or add this "+\
     "content to the general [D]escription ? Or [I]gnore ? \n"+\
     "    [A]|L|S|D|I:"
 
@@ -180,13 +179,16 @@ def GetProgHelpParam(execline, record_separator, field_separator):
     #std_help_pattern = re.compile(r"^((?P<short>\w{1})?,?(\s)+"+\
     #"(--?(?P<long>(\w)+)(\s)+)?)?(?P<descrip>((.+(\n|\r\n?)?)"+\
     #"*))", re.M|re.U|re.I)
-    std_help_pattern = re.compile(r"^(?P<short>\w{1,3},?" + fs + ")?"+\
+    std_help_pattern = re.compile(r"^(?P<short>\w+,?" + fs + ")?"+\
     "(--?(?P<long>\w+([-=]?(\w+)?)*)" + fs + ")?(?P<descrip>((.+"+\
     "(\n|\r\n?)?)*))", re.M|re.U|re.I)
 
     print("Try to parse default help output from program '%s'" \
     % execline)
+    # some problems with "<" or ">" because we need to generate a xml
+    # content
     results = sanitize(sendcommand(execline))
+    #results = sendcommand(execline)
     print("\n\n"+"#"*25+"\n")
     print("Output that should be parse : \n\n"+"#"*25+"\n %s" % results)
     print("\n"+"#"*25+"\n\n")
@@ -204,6 +206,9 @@ def GetProgHelpParam(execline, record_separator, field_separator):
         anything
         """
         if generic_opt == "A" or generic_opt == "":
+            # for debug: some search are bad because of a wrong
+            # field separator
+            #print arg
             content_in_arg = std_help_pattern.search(arg)
             results = content_in_arg.groupdict()
             if results:

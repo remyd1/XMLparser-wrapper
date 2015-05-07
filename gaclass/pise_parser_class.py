@@ -5,6 +5,8 @@
 # -> elementTree ?
 
 import pprint as pp
+#from utils import sanitize
+
 
 class XmlPise():
     """
@@ -258,6 +260,7 @@ class XmlPise():
                                 the_output["descrips_args"]+"</prompt>\n"
                             subelems_content += ' '*6+"</attributes>\n"
                             subelems_content += ' '*4+"</parameter>\n\n"
+
                 return subelems_content
 
 

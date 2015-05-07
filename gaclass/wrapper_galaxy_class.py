@@ -4,6 +4,8 @@
 #from xml.dom import minidom
 # -> elementTree ?
 import re
+#from utils import sanitize
+
 
 class XmlGW():
     """
@@ -100,15 +102,37 @@ class XmlGW():
                             "</option>"
                 if not re.search("output", self.descrips[i], re.I):
                     if self.long_args[i] != "":
-                        name = re.sub('[!@#$-=]', '', self.long_args[i])
-                        content += "\n"+" "*8+"<param name=\""+\
-                        name+"\" type=\"\" label=\""+self.long_args[i]+\
-                        "\" help=\""+self.descrips[i]+"\" />"
+                        # substitute some special chars / html entities.
+                        name = re.sub('&lt;', '', self.long_args[i])
+                        name = re.sub('&gt;', '', self.long_args[i])
+                        name = re.sub('&quot;', '', self.long_args[i])
+                        name = re.sub('&amp;', '', self.long_args[i])
+                        name = re.sub('[!&@#$-=]', '', self.long_args[i])
+                        if name != "":
+                            content += "\n"+" "*8+"<param name=\""+\
+                            name+"\" type=\"\" label=\""+self.long_args[i]+\
+                            "\" help=\""+self.descrips[i]+"\" />"
+                        else:
+                            # something goes wrong. Adding it into comments
+                            content += "\n"+" "*8+"<!--param name=\""+\
+                            name+"\" type=\"\" label=\""+self.long_args[i]+\
+                            "\" help=\""+self.descrips[i]+"\" /-->"
                     else:
-                        name = re.sub('[!@#$-=]', '', self.short_args[i])
-                        content += "\n"+" "*8+"<param name=\""+name+\
-                        "\" type=\"\" label=\""+self.short_args[i]+\
-                        "\" help=\""+self.descrips[i]+"\" />"
+                        # substitute some special chars / html entities.
+                        name = re.sub('&lt;', '', self.short_args[i])
+                        name = re.sub('&gt;', '', self.short_args[i])
+                        name = re.sub('&quot;', '', self.short_args[i])
+                        name = re.sub('&amp;', '', self.short_args[i])
+                        name = re.sub('[!&@#$-=]', '', self.short_args[i])
+                        if name != "":
+                            content += "\n"+" "*8+"<param name=\""+name+\
+                            "\" type=\"\" label=\""+self.short_args[i]+\
+                            "\" help=\""+self.descrips[i]+"\" />"
+                        else:
+                            # something goes wrong. Adding it into comments
+                            content += "\n"+" "*8+"<!--param name=\""+name+\
+                            "\" type=\"\" label=\""+self.short_args[i]+\
+                            "\" help=\""+self.descrips[i]+"\" /-->"
                 else:
                     j.append(i)
             content += "\n"+" "*4+"</inputs>"
