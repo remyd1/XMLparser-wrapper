@@ -7,7 +7,7 @@ class JsonData():
     """
     Class for json objects
     """
-    def __init__(self,wn,ann,step_id,tname,ttool_id,ttype,ttool_version, \
+    def __init__(self, wn, ann, step_id, tname, ttool_id, ttype, ttool_version, \
     tinput_name, toutput_name, tuser_output_name, ttool_state, \
     ttool_errors):
         """
@@ -44,17 +44,17 @@ class JsonData():
         text = []
         InOut = []
         for j in iter(InOutput):
-            if(InOutput[0] is not None):
-                if(j['name']):
+            if InOutput[0] is not None:
+                if j['name']:
                     text.append("\t Name : "+j['name'])
                     InOut.append(["name", j, j['name']])
-                if(InOutType == "input"):
+                if InOutType == "input":
                     text.append("\t Description : "+j['description'])
                     InOut.append(["description", j, j['description']])
-                if(InOutType == "output"):
+                if InOutType == "output":
                     text.append("\t Type : "+j['type'])
                     InOut.append(["type", j, j['type']])
-        if(aff == True):
+        if aff == True:
             self.display(text)
         return InOut
 
@@ -68,10 +68,9 @@ class JsonData():
         text = []
         opts = {}
         try:
-            if(params_tools['adv_opts']):
-                match = re.search(pattern, \
-                params_tools['adv_opts'])
-                if(match is not None):
+            if params_tools['adv_opts']:
+                match = re.search(pattern, params_tools['adv_opts'])
+                if match is not None:
                     opts["advanced"] = params_tools['adv_opts']
                     text.append("\t - Advanced option found")
                     text.append("\t" + params_tools['adv_opts'])
@@ -84,7 +83,7 @@ class JsonData():
             self.tname)
             text.append("\t" + self.ttool_state)
             opts["other"] = self.ttool_state
-        if(aff == True):
+        if aff == True:
             self.display(text)
         return opts
 

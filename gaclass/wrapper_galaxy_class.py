@@ -91,15 +91,15 @@ class XmlGW():
                         selectname = self.long_args[i]
                         content += "\n"+" "*8+"<param name=\""+\
                         selectname+"\" type=\"select\" label=\""+\
-                        self.descrips_args[i]+"\">"
+                        self.descrips[i]+"\">"
                         for idx in range(len(self.\
                         vlist[selectname]["value"])):
                             content += "\n"+" "*12+"<option value=\""+\
                             self.vlist[selectname]["value"][idx]+\
                             "\" >"+self.vlist[selectname]["text"][idx]+\
                             "</option>"
-                if not re.search("output",self.descrips[i],re.I):
-                    if(self.long_args[i] != ""):
+                if not re.search("output", self.descrips[i], re.I):
+                    if self.long_args[i] != "":
                         name = re.sub('[!@#$-=]', '', self.long_args[i])
                         content += "\n"+" "*8+"<param name=\""+\
                         name+"\" type=\"\" label=\""+self.long_args[i]+\
@@ -125,7 +125,7 @@ class XmlGW():
                     "\"></data>"
                 else:
                     for k in j:
-                        if(self.long_args[k] != ""):
+                        if self.long_args[k] != "":
                             content += "\n"+" "*8+"<data name=\""+\
                             self.long_args[k]+"_out\" label=\""+\
                             self.descrips[k]+"\" help=\""+\
@@ -267,11 +267,11 @@ class XmlGW():
                     excl["parameter"]["long_args"]+"' type"+\
                     "='select' label='"
                     if excl["parameter"].has_key("descrips_args"):
-                        excl["parameter"]["descrips_args"]
+                        subelems_content += excl["parameter"]["descrips_args"]
                     elif excl["parameter"].has_key("general_descrip"):
-                        excl["parameter"]["general_descrip"]
+                        subelems_content += excl["parameter"]["general_descrip"]
                     subelems_content += "'>\n"
-                    for key,option_val in enumerate(excl["parameter"]\
+                    for key, option_val in enumerate(excl["parameter"]\
                     ["vlist"]["value"]):
                         subelems_content += " "*8
                         if option_val is not None:
@@ -287,7 +287,7 @@ class XmlGW():
                                     ["vlist"]["text"][key]
                             subelems_content += "</option>\n"
                     subelems_content += " "*4+"</param>\n"
-            if (len(self.sub_elems["outfile"]) > 0):
+            if len(self.sub_elems["outfile"]) > 0:
                 subelems_content += "\n"+" "*4+"<outputs>\n"
                 for outfile in self.sub_elems["outfile"]:
                     subelems_content += " "*8+"<data format='' "+\

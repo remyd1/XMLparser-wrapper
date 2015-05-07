@@ -34,8 +34,8 @@ def ConstructMyGaParser(jsondata):
         ttool_state = jsondata['steps'][str(i)]['tool_state']
         ttool_errors = jsondata['steps'][str(i)]['tool_errors']
 
-        ListeJsonData.append(JsonData(workflow_name,annotation,step_id,\
-        tname,ttool_id,ttype,ttool_version,tinput_name,toutput_name, \
+        ListeJsonData.append(JsonData(workflow_name, annotation, step_id, \
+        tname, ttool_id, ttype, ttool_version, tinput_name, toutput_name, \
         tuser_output_name, ttool_state, ttool_errors))
 
     return ListeJsonData
@@ -54,7 +54,8 @@ def getjson(infile):
             sys.exit("Not a json file !! Bye bye...")
     #except Exception as e:
         #top = traceback.extract_stack()[-1]
-        #print(', '.join([type(e).__name__, os.path.basename(top[0]), str(top[1])]))
+        #print(', '.join([type(e).__name__, os.path.basename(top[0]), \
+        #str(top[1])]))
     except:
         sys.exit("Your file is not a text file readable !! Bye "+\
         "bye...")
@@ -80,21 +81,21 @@ def getworkflowparams(ListeJsonData):
         ttool_state = JsonData.ttool_state
         ttool_errors = JsonData.ttool_errors
 
-        if(ttool_errors is None):
+        if ttool_errors is None:
             print("id : "+str(step_id))
             print("tool name : "+tname)
-            if(ttool_id is not None):
+            if ttool_id is not None:
                 print("tool_id : " +ttool_id)
             print("type : " +ttype)
-            if(ttool_version is not None):
+            if ttool_version is not None:
                 print("version : " +ttool_version)
-            if(tinput_name):
+            if tinput_name:
                 print("Input : ")
-                JsonData.ParseInOutVal(tinput_name,"input",aff)
-            if(toutput_name):
+                JsonData.ParseInOutVal(tinput_name, "input", aff)
+            if toutput_name:
                 print("Output : ")
-                JsonData.ParseInOutVal(toutput_name,"output",aff)
-            if(ttype == "tool"):
+                JsonData.ParseInOutVal(toutput_name, "output", aff)
+            if ttype == "tool":
                 print("#"*40)
                 #params_tools = ttool_state.replace("\\","")
                 #params_tools = eval(ttool_state)
@@ -113,21 +114,21 @@ def getinterpreter(filetype):
     executable
     > Return the interpreter
     """
-    if re.search("Bourne-Again shell",filetype,flags=re.I):
+    if re.search("Bourne-Again shell", filetype, flags=re.I):
         interpreter = 'bash'
-    elif re.search("python",filetype,flags=re.I):
+    elif re.search("python", filetype, flags=re.I):
         interpreter = 'python'
-    elif re.search("perl",filetype,flags=re.I):
+    elif re.search("perl", filetype, flags=re.I):
         interpreter = 'perl'
-    elif re.search("Tenex C shell",filetype,flags=re.I):
+    elif re.search("Tenex C shell", filetype, flags=re.I):
         interpreter = 'tcsh'
-    elif re.search("C shell",filetype,flags=re.I):
+    elif re.search("C shell", filetype, flags=re.I):
         interpreter = 'csh'
-    elif re.search("Korn shell",filetype,flags=re.I):
+    elif re.search("Korn shell", filetype, flags=re.I):
         interpreter = 'ksh'
-    elif re.search("zsh",filetype,flags=re.I):
+    elif re.search("zsh", filetype, flags=re.I):
         interpreter = 'zsh'
-    elif re.search("PHP",filetype,flags=re.I):
+    elif re.search("PHP", filetype, flags=re.I):
         interpreter = 'php'
     else:
         interpreter = 'sh'
@@ -135,7 +136,7 @@ def getinterpreter(filetype):
 
 
 
-def GetProgHelpParam(execline,record_separator,field_separator):
+def GetProgHelpParam(execline, record_separator, field_separator):
     """
     Try to parse the Help section of a program stdout
     < Get a command line to execute [Help section of this program]
@@ -172,8 +173,8 @@ def GetProgHelpParam(execline,record_separator,field_separator):
     "content to the general [D]escription ? Or [I]gnore ? \n"+\
     "    [A]|L|S|D|I:"
 
-    sep_r = re.compile(record_separator,flags=re.U)
-    sep_f = re.compile(field_separator,flags=re.U)
+    sep_r = re.compile(record_separator, flags=re.U)
+    sep_f = re.compile(field_separator, flags=re.U)
     fs = field_separator
 
     #std_help_pattern = re.compile(r"^((?P<short>\w{1})?,?(\s)+"+\
@@ -192,12 +193,12 @@ def GetProgHelpParam(execline,record_separator,field_separator):
 
     generic_opt = raw_input(first_message)
 
-    argsarray = re.split(sep_r,results)
+    argsarray = re.split(sep_r, results)
 
     print("\n\n"+"#"*25+"\n\n")
     for arg in argsarray:
         #the_option = arg.split()
-        the_option = re.split(sep_f,arg)
+        the_option = re.split(sep_f, arg)
         """
         generic_opt is automatic -> Same as bellow without asking
         anything
@@ -245,7 +246,7 @@ def GetProgHelpParam(execline,record_separator,field_separator):
                     else:
                         descrips.append("")
                 continue
-        if(DIALS != "D" and DIALS != "I"):
+        if DIALS != "D" and DIALS != "I":
             try:
                 first_opt = the_option[0]
                 if len(the_option) >= 3:
@@ -267,7 +268,7 @@ def GetProgHelpParam(execline,record_separator,field_separator):
                     short_args.append("")
             except:
                 print("Warning: Bad field separator ?!!")
-        elif(DIALS == "D"):
+        elif DIALS == "D":
             general_descrip.append(arg)
         else:
             DIALS = "U" #undefined
@@ -276,7 +277,7 @@ def GetProgHelpParam(execline,record_separator,field_separator):
     progname = execline.split()[0]
     # check if progname is an iterpreter or the program itself (executable)
     for arg0 in interpreter_list:
-        if(progname == arg0):
+        if progname == arg0:
             # check for dash in next args to see if it is option or
             # the program name itself
             for next_arg in execline.split()[1:]:
@@ -330,7 +331,7 @@ def GetVersion(progfullname):
     """
     vprogoutput = sendcommand(progfullname+ \
     " --version")
-    vprog = re.search(r"\d+(\.\d+)*\s",vprogoutput,\
+    vprog = re.search(r"\d+(\.\d+)*\s", vprogoutput, \
     re.M|re.U)
     if vprog:
         print("Find version:"+vprog.group().encode('utf8'))
@@ -356,7 +357,7 @@ def pisewrapper(ListeJsonData, fname):
     """
     writewn = False
     if type(fname) is str:
-        xmlfile = open(fname,"w")
+        xmlfile = open(fname, "w")
     else:
         xmlfile = fname
     In = []
@@ -381,18 +382,18 @@ def pisewrapper(ListeJsonData, fname):
         ttool_state = JsonData.ttool_state
         ttool_errors = JsonData.ttool_errors
 
-        if(ttool_errors is None):
-            if(tinput_name):
-                In = JsonData.ParseInOutVal(tinput_name,"input",aff)
-            if(toutput_name):
-                Out = JsonData.ParseInOutVal(toutput_name,"output",aff)
-        if(ttype == "tool"):
+        if ttool_errors is None:
+            if tinput_name:
+                In = JsonData.ParseInOutVal(tinput_name, "input", aff)
+            if toutput_name:
+                Out = JsonData.ParseInOutVal(toutput_name, "output", aff)
+        if ttype == "tool":
             params_tools = json.loads(ttool_state)
-            opts = JsonData.ParseParams(params_tools,aff)
+            opts = JsonData.ParseParams(params_tools, aff)
 
         #headers +
         #parameter type infile
-        if(writewn == False):
+        if writewn == False:
             headers += '<pise>\n'+\
             '<head>\n'+\
             ' '*2 +'<title>'+wn+'</title>\n'+\
@@ -400,7 +401,7 @@ def pisewrapper(ListeJsonData, fname):
             ' '*2 +'<authors>ParserConverterXML</authors>\n'+\
             '</head>\n'+\
             ' '*2 +'<command>'+wn+'</command>\n'+\
-            ' '*2 +'<parameters>\n';
+            ' '*2 +'<parameters>\n'
             xmlfile.write(headers)
             writewn = True
 
@@ -415,15 +416,15 @@ def pisewrapper(ListeJsonData, fname):
         xmlfile.write(' '*12 +'<name>'+str(tinput_name)+'</name>\n')
         xmlfile.write(' '*10 +'</parameter>\n')
 
-    footers=' '*2 +'</parameters>\n'+\
-    '</pise>';
+    footers = ' '*2 +'</parameters>\n'+\
+    '</pise>'
     xmlfile.write(footers)
     xmlfile.close()
 
 
 
 def sanitize(string):
-    charsdict =  {
+    charsdict = {
     '<': '&lt;',
     '>': '&gt;',
     '&': '&amp;',
@@ -440,6 +441,6 @@ def sendcommand(cmd):
     Take a shell bash command
     Return the stdout value for a pipe subprocess
     """
-    proc = subprocess.Popen("bash",shell=True,stdin=subprocess.PIPE, \
-    stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    proc = subprocess.Popen("bash", shell=True, stdin=subprocess.PIPE, \
+    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return proc.communicate(cmd)[0]

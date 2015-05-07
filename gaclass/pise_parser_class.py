@@ -13,7 +13,7 @@ class XmlPise():
     . you want to parse a pise xml wrapper
     . you want to create a xml tool for galaxy from xml pise wrapper
     """
-    def __init__(self,mybigdict,vprog,vtool,catname,nb_paraph):
+    def __init__(self, mybigdict, vprog, vtool, catname, nb_paraph):
         if "short_args" in mybigdict:
             self.short_args = mybigdict["short_args"]
         self.long_args = mybigdict["long_args"]
@@ -53,12 +53,12 @@ class XmlPise():
 
 
 
-    def GenParams(self,short_args,long_args,descrips):
+    def GenParams(self, short_args, long_args, descrips):
         """
         Generate some parapragh for Pise Xml wrapper
         """
         param = ''
-        for key,s_o in enumerate(short_args):
+        for key, s_o in enumerate(short_args):
             """
             s_o is for 'short_options'
             """
@@ -99,7 +99,7 @@ class XmlPise():
             param += ' '*12+'</attributes>\n'
             param += ' '*10+'</parameter>\n\n'
 
-        return( param )
+        return param
 
 
 
@@ -132,7 +132,7 @@ class XmlPise():
             paraphs += paraph_txt
             the_paraph += 1
 
-        return ( paraphs )
+        return paraphs
 
 
 
@@ -146,7 +146,7 @@ class XmlPise():
         #pp.pprint(self.sub_elems)
         if self.sub_elems is not None:
             # sub_elem is a dict containing lists
-            if (len(self.sub_elems["inputs"]) > 0):
+            if len(self.sub_elems["inputs"]) > 0:
                 #print(type(self.sub_elems["inputs"]))
                 for inputs in self.sub_elems["inputs"]:
                     if not inputs.has_key("inputs"):
@@ -206,7 +206,7 @@ class XmlPise():
                             if the_input.has_key("vlist"):
                                 subelems_content += ' '*8
                                 subelems_content += "<vlist>\n"
-                                for key,vlist_value in \
+                                for key, vlist_value in \
                                 enumerate(the_input["vlist"]["value"]):
                                     subelems_content += ' '*10+"<value>"+\
                                     vlist_value+"</value>\n"
@@ -228,7 +228,7 @@ class XmlPise():
                             subelems_content += ' '*6+"</attributes>\n"
                             subelems_content += ' '*4
                             subelems_content += "</parameter>\n\n"
-            if (len(self.sub_elems["outputs"]) > 0):
+            if len(self.sub_elems["outputs"]) > 0:
                 for outputs in self.sub_elems["outputs"]:
                     if not outputs.has_key("outputs"):
                         continue
@@ -258,7 +258,7 @@ class XmlPise():
                                 the_output["descrips_args"]+"</prompt>\n"
                             subelems_content += ' '*6+"</attributes>\n"
                             subelems_content += ' '*4+"</parameter>\n\n"
-                return( subelems_content )
+                return subelems_content
 
 
 
@@ -282,7 +282,7 @@ class XmlPise():
         endheader = ' '*4 +'<category>'+self.catname+'</category>\n'+\
         ' '*4 +'<versionprog>'+self.vprog.strip()+'</versionprog>\n'+\
         ' '*4 +'<versiontool>'+self.vtool+'</versiontool>\n'+\
-        ' '*2 +'</head>\n';
+        ' '*2 +'</head>\n'
         beginbody = ' '*2+'<command>'+self.progshortname+'</command>\n'
         beginbody += ' '*2+'<parameters>\n'
 
@@ -327,4 +327,4 @@ class XmlPise():
 
         return_content += content
         return_content += footer
-        return( return_content )
+        return return_content

@@ -7,11 +7,11 @@ except ImportError:
     import xml.etree.ElementTree as ET
 import sys
 import pprint as pp
-import re
+#import re
 
 
 def parseXml(xmlfile):
-    ppty = pp.PrettyPrinter(indent=4,depth=10,width=40)
+    ppty = pp.PrettyPrinter(indent=4, depth=10, width=40)
     tree = ET.parse(xmlfile)
     root = tree.getroot()
     mybigdict = {}
@@ -21,7 +21,7 @@ def parseXml(xmlfile):
         endtext = "#"*20+" [ End Wrapper Pise ] "+"#"*20
     elif root.tag == "tool":
         print("#"*20+" Wrapper Galaxy "+"#"*20)
-        mybigdict = getGalaxyElement(tree,root)
+        mybigdict = getGalaxyElement(tree, root)
         endtext = "#"*20+" [ End Wrapper Galaxy ]"+"#"*20
     else:
         sys.exit(" Unknown Xml file ")
@@ -36,7 +36,7 @@ def parseXml(xmlfile):
 
 
 
-def getGalaxyElement(tree,root):
+def getGalaxyElement(tree, root):
     mybigdict = {}
     mybigdict["short_args"] = []
     mybigdict["long_args"] = []
@@ -203,7 +203,7 @@ def parse_galaxy_sub_elem(elem):
                         elemval.text)
                 elif subelem.attrib["type"] == "data" or \
                 subelem.attrib["type"] == "file" or \
-                subelem.attrib["type"] == "ftpfile" :
+                subelem.attrib["type"] == "ftpfile":
                     if subelem.attrib["format"] == "fasta":
                         mydict[elem.tag][name]["sequence"] = True
                     else:
@@ -277,7 +277,7 @@ def parse_pise_sub_elem(elem, paragraph):
                 mydict[elem.tag]["outfile"] = subelem.text
             elif subelem.tag == "format":
                 if subelem.find("code") is not None:
-                    code = subelem.find("code").text.replace('=',' ')
+                    code = subelem.find("code").text.replace('=', ' ')
                     code = code.split()
                     for the_arg in code:
                         if the_arg.startswith("-"):

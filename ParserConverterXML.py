@@ -54,91 +54,91 @@ if __name__ == "__main__":
     + " release from Remy Dernat, Evolution Science Institute -"\
     + " Montpellier, France."
 
-    parser = argparse.ArgumentParser(description=usage,epilog=epilog)
+    parser = argparse.ArgumentParser(description=usage, epilog=epilog)
     parser.add_argument('--version', action='version', \
     version='%(prog)s 0.2')
 
     subparsers = parser.add_subparsers(help='command', dest='command')
 
-    disp = subparsers.add_parser("disp", help = "Display galaxy "\
+    disp = subparsers.add_parser("disp", help="Display galaxy "\
     + "workflow parameters (.ga / json file).")
-    disp.add_argument('-i', '--input', type = argparse.FileType('r'), \
-    help = "Galaxy workflow (.ga) filename to parse")
+    disp.add_argument('-i', '--input', type=argparse.FileType('r'), \
+    help="Galaxy workflow (.ga) filename to parse")
     disp.set_defaults(command='disp')
 
     ga2p = subparsers.add_parser('ga2p', help="Convert galaxy workflow"\
     +" to XML-Pise (.ga / json file).")
     ga2p.add_argument('-o', '--output', \
-    type=argparse.FileType('wb', 0), help = "Pise "+\
+    type=argparse.FileType('wb', 0), help="Pise "+\
     "filename to create")
     ga2p.add_argument('-i', '--input', type=argparse.FileType('r'), \
-    help= "Galaxy workflow (.ga / json file) filename to parse")
-    ga2p.set_defaults(command = 'ga2p')
+    help="Galaxy workflow (.ga / json file) filename to parse")
+    ga2p.set_defaults(command='ga2p')
 
     p2ga = subparsers.add_parser('p2ga', help="Convert pise wrapper to"\
     " galaxy workflow (.ga / json file).")
     p2ga.add_argument('-o', '--output', \
-    type=argparse.FileType('wb', 0), help = "Galaxy "+\
+    type=argparse.FileType('wb', 0), help="Galaxy "+\
     "filename to create")
-    p2ga.add_argument('-i', '--input', type = argparse.FileType('r'), \
-    help = "Galaxy workflow (.ga / json file) filename to parse")
-    p2ga.set_defaults(command = 'p2ga')
+    p2ga.add_argument('-i', '--input', type=argparse.FileType('r'), \
+    help="Galaxy workflow (.ga / json file) filename to parse")
+    p2ga.set_defaults(command='p2ga')
 
     p2gw = subparsers.add_parser('p2gw', help="Convert pise wrapper to"\
     " galaxy wrapper (.xml).")
     p2gw.add_argument('-o', '--output', \
-    type=argparse.FileType('wb', 0), help = "Galaxy "+\
+    type=argparse.FileType('wb', 0), help="Galaxy "+\
     "filename to create")
-    p2gw.add_argument('-i', '--input', type = argparse.FileType('r'), \
-    help= "Pise wrapper (.xml) filename to parse")
-    p2gw.set_defaults(command = 'p2gw')
+    p2gw.add_argument('-i', '--input', type=argparse.FileType('r'), \
+    help="Pise wrapper (.xml) filename to parse")
+    p2gw.set_defaults(command='p2gw')
 
     gw2p = subparsers.add_parser('gw2p', help="Convert galaxy wrapper "\
     "to pise wrapper (.xml).")
     gw2p.add_argument('-o', '--output', \
-    type = argparse.FileType('wb', 0), help = "Pise "\
+    type=argparse.FileType('wb', 0), help="Pise "\
     "filename to create")
-    gw2p.add_argument('-i', '--input', type = argparse.FileType('r'), \
-    help = "Galaxy wrapper (.xml) filename to parse")
-    gw2p.set_defaults(command = 'gw2p')
+    gw2p.add_argument('-i', '--input', type=argparse.FileType('r'), \
+    help="Galaxy wrapper (.xml) filename to parse")
+    gw2p.set_defaults(command='gw2p')
 
-    h2gw = subparsers.add_parser('h2gw', help = "retrieve arguments "\
+    h2gw = subparsers.add_parser('h2gw', help="retrieve arguments "\
     +"options from an help program output and convert it to a galaxy "\
     +"wrapper.")
-    h2gw.add_argument('-o', '--output', required = True, \
-    type=argparse.FileType('wb', 0), help = "Galaxy "+\
+    h2gw.add_argument('-o', '--output', required=True, \
+    type=argparse.FileType('wb', 0), help="Galaxy "+\
     "filename to create")
-    h2gw.add_argument("-c", "--commandline", required = True, \
-    help= "Your command line "\
+    h2gw.add_argument("-c", "--commandline", required=True, \
+    help="Your command line "\
     +"to parse; Usually 'yourbinaryprogram --help' or '-h'")
     h2gw.add_argument("-rs", "--record_separator", \
-    help = "Record separator is a string that seperate each line of "+\
+    help="Record separator is a string that seperate each line of "+\
     "arguments. It could be a regular expression. Default value is "+\
-    "a regexp: '\\n\\s+-'.", default = "\n\s+-")
+    "a regexp: '\\n\\s+-'.", default="\n\s+-")
     h2gw.add_argument("-fs", "--field_separator", \
-    help = "Field separator is a string that seperate each option and"+\
+    help="Field separator is a string that seperate each option and"+\
     " description within a line of help. It could be a regular "+\
-    "expression. Default value is a regexp: '\\s+'.", default = "\s+")
-    h2gw.set_defaults(command = 'h2gw')
+    "expression. Default value is a regexp: '\\s+'.", default="\s+")
+    h2gw.set_defaults(command='h2gw')
 
     h2p = subparsers.add_parser('h2p', help="retrieve arguments "\
     +"options from an help program output and convert it to a Pise "\
     +"wrapper.")
-    h2p.add_argument('-o', '--output', required = True, \
-    type = argparse.FileType('wb', 0), help = "Pise "+\
+    h2p.add_argument('-o', '--output', required=True, \
+    type=argparse.FileType('wb', 0), help="Pise "+\
     "filename to create")
-    h2p.add_argument("-c", "--commandline", required = True, \
-    help = "Your command line "\
+    h2p.add_argument("-c", "--commandline", required=True, \
+    help="Your command line "\
     +"to parse; Usually 'yourbinaryprogram --help' or '-h'")
     h2p.add_argument("-rs", "--record_separator", \
-    help = "Record separator is a string that seperate each line of "+\
+    help="Record separator is a string that seperate each line of "+\
     "arguments. It could be a regular expression. Default value is "+\
-    "a regexp: '\\n\\s+-'.", default = "\n\s+-")
+    "a regexp: '\\n\\s+-'.", default="\n\s+-")
     h2p.add_argument("-fs", "--field_separator", \
-    help = "Field separator is a string that seperate each option and"+\
+    help="Field separator is a string that seperate each option and"+\
     " description within a line of help. It could be a regular "+\
-    "expression. Default value is a regexp: '\\s+'.", default = "\s+")
-    h2p.set_defaults(command = 'h2p')
+    "expression. Default value is a regexp: '\\s+'.", default="\s+")
+    h2p.set_defaults(command='h2p')
 
     args = parser.parse_args()
 
@@ -147,36 +147,36 @@ if __name__ == "__main__":
     fromwrapper = False
 
     try:
-        if(args.input):
+        if args.input:
             infile = args.input
             fname = infile.name.rpartition(".")
             fname = fname[0]
     except:
         infile = False
-        if(args.command != "disp" and args.command != "h2p" and \
-        args.command != "h2gw"):
+        if args.command != "disp" and args.command != "h2p" and \
+        args.command != "h2gw":
             sys.exit("Could not execute this command without an input"+\
             " file!")
 
     outfile = False
     try:
-        if(args.output):
+        if args.output:
             outfile = args.output
     except:
         outfile = False
 
-    if(args.command == "disp"):
+    if args.command == "disp":
         jsondata = getjson(infile)
         print("Processing workflow params...")
-        if(jsondata):
+        if jsondata:
             ListeJsonData = ConstructMyGaParser(jsondata)
             getworkflowparams(ListeJsonData)
         else:
             print("jsondata is not defined")
-    elif(args.command == "ga2p"):
+    elif args.command == "ga2p":
         jsondata = getjson(infile)
         print("Converting to Pise XML...")
-        if(jsondata):
+        if jsondata:
             ListeJsonData = ConstructMyGaParser(jsondata)
             if outfile is False:
                 pisewrapper(ListeJsonData, fname+".xml")
@@ -186,7 +186,7 @@ if __name__ == "__main__":
                 pisewrapper(ListeJsonData, outfile)
         else:
             print("jsondata is not defined")
-    elif(args.command == "p2gw"):
+    elif args.command == "p2gw":
         fromwrapper = True
         print("Converting Pise XML to galaxy XML...")
         mybigdict = parseXml(infile)
@@ -200,15 +200,18 @@ if __name__ == "__main__":
             "'bash'):")
             if mybigdict["interpreter"] == "":
                 mybigdict["interpreter"] = 'bash'
-        GalaxWrapperObj = XmlGW(mybigdict,vprog,vtool)
+        GalaxWrapperObj = XmlGW(mybigdict, vprog, vtool)
         GalaxWrapper = GalaxWrapperObj.GenGalaxWrapper(fromwrapper)
-        outfile.write(GalaxWrapper)
-        outfile.close()
-        print("The Galaxy XML wrapper has been generated. Edit that "+\
-        "file to check if everything is ok, especially options that "+\
-        "require specific or conditionnaly constraints (when tags / "+\
-        "select / data_ref) ")
-    elif(args.command == "gw2p"):
+        if outfile:
+            outfile.write(GalaxWrapper)
+            outfile.close()
+            print("The Galaxy XML wrapper has been generated. Edit that "+\
+            "file to check if everything is ok, especially options that "+\
+            "require specific or conditionnaly constraints (when tags / "+\
+            "select / data_ref) ")
+        else:
+            sys.exit("No output file found!")
+    elif args.command == "gw2p":
         fromwrapper = True
         print("Converting Galaxy XML to Pise XML...")
         mybigdict = parseXml(infile)
@@ -229,50 +232,58 @@ if __name__ == "__main__":
                 print("Sorry, not a number. Try again...\n")
         if not 'progshortname' in mybigdict:
             mybigdict["progshortname"] = mybigdict["progfullname"]
-        PiseWrapper = XmlPise(mybigdict,vprog,vtool,catname,\
+        PiseWrapper = XmlPise(mybigdict, vprog, vtool, catname, \
         nb_paraph)
         PiseWrapperFormat = PiseWrapper.createXml(fromwrapper)
-        outfile.write(PiseWrapperFormat)
-        outfile.close()
-    elif(args.command == "p2ga"):
-        print("Converting Pise XML to galaxy file...")
-    elif(args.command == "h2gw"):
-        if(args.commandline):
-            execline = args.commandline
-            outfile = args.output
-            try:
-                if(record_separator):
-                    record_separator = args.record_separator
-            except:
-                record_separator = "\n\s+-"
-            try:
-                if(field_separator):
-                    field_separator = args.field_separator
-            except:
-                field_separator = "\s+"
-            mybigdict = GetProgHelpParam(execline,record_separator,field_separator)
-            vprog, vtool = GetVersion(mybigdict["progfullname"])
-            GalaxWrapperObj = XmlGW(mybigdict,vprog,vtool)
-            GalaxWrapper = GalaxWrapperObj.GenGalaxWrapper(fromwrapper)
-            outfile.write(GalaxWrapper)
+        if outfile:
+            outfile.write(PiseWrapperFormat)
             outfile.close()
         else:
-            sys.exit("No command line given... Bye bye...")
-    elif(args.command == "h2p"):
-        if(args.commandline):
+            sys.exit("No output file found!")
+    elif args.command == "p2ga":
+        print("Converting Pise XML to galaxy file...")
+    elif args.command == "h2gw":
+        if args.commandline:
             execline = args.commandline
             outfile = args.output
             try:
-                if(record_separator):
+                if args.record_separator:
                     record_separator = args.record_separator
             except:
                 record_separator = "\n\s+-"
             try:
-                if(field_separator):
+                if args.field_separator:
                     field_separator = args.field_separator
             except:
                 field_separator = "\s+"
-            mybigdict = GetProgHelpParam(execline,record_separator,field_separator)
+            mybigdict = GetProgHelpParam(execline, record_separator, \
+            field_separator)
+            vprog, vtool = GetVersion(mybigdict["progfullname"])
+            GalaxWrapperObj = XmlGW(mybigdict, vprog, vtool)
+            GalaxWrapper = GalaxWrapperObj.GenGalaxWrapper(fromwrapper)
+            if outfile:
+                outfile.write(GalaxWrapper)
+                outfile.close()
+            else:
+                sys.exit("No output file found!")
+        else:
+            sys.exit("No command line given... Bye bye...")
+    elif args.command == "h2p":
+        if args.commandline:
+            execline = args.commandline
+            outfile = args.output
+            try:
+                if args.record_separator:
+                    record_separator = args.record_separator
+            except:
+                record_separator = "\n\s+-"
+            try:
+                if args.field_separator:
+                    field_separator = args.field_separator
+            except:
+                field_separator = "\s+"
+            mybigdict = GetProgHelpParam(execline, record_separator, \
+            field_separator)
             vprog, vtool = GetVersion(mybigdict["progfullname"])
             catname = raw_input("In what category would you like to "+\
             "include this Tool[[NGS]|Phylogenomics|Population "+\
@@ -288,7 +299,7 @@ if __name__ == "__main__":
                 except:
                     print("Sorry, not a number. Try again...\n")
 
-            PiseWrapper = XmlPise(mybigdict,vprog,vtool,catname,\
+            PiseWrapper = XmlPise(mybigdict, vprog, vtool, catname, \
             nb_paraph)
             PiseWrapperFormat = PiseWrapper.createXml(fromwrapper)
             outfile.write(PiseWrapperFormat)
