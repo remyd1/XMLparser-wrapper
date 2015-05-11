@@ -180,6 +180,9 @@ if __name__ == "__main__":
 
 
     if args.command == "disp":
+        """
+        Display workflow content
+        """
         jsondata = getjson(infile)
         print("Processing workflow params...")
         if jsondata:
@@ -202,6 +205,9 @@ if __name__ == "__main__":
             print("jsondata is not defined")
 
     elif args.command == "p2gw":
+        """
+        From pise file try to create a XML Galaxy Wrapper file
+        """
         fromwrapper = True
         print("Converting Pise XML to galaxy XML...")
         mybigdict = parseXml(infile)
@@ -228,6 +234,9 @@ if __name__ == "__main__":
             sys.exit("No output file found!")
 
     elif args.command == "gw2p":
+        """
+        From Galaxy wrapper, try to create a Pise XML file
+        """
         fromwrapper = True
         print("Converting Galaxy XML to Pise XML...")
         mybigdict = parseXml(infile)
@@ -258,11 +267,15 @@ if __name__ == "__main__":
             sys.exit("No output file found!")
 
     elif args.command == "p2ga":
+        """
+        Pise to Galaxy file
+        Need to be done
+        """
         print("Converting Pise XML to galaxy file...")
 
     elif args.command == "h2gw":
         """
-        Help to Galaxy Wrapper
+        Stdout/Help to Galaxy Wrapper XML file
         """
         if not outfile:
             sys.exit("No output file found!")
@@ -298,42 +311,58 @@ if __name__ == "__main__":
         outfile.close()
 
     elif args.command == "h2p":
+        """
+        Stdout/Help to Pise XML file
+        """
+        if not outfile:
+            sys.exit("No output file found!")
+        else:
+            outfile = args.output
         if args.commandline:
             execline = args.commandline
-            outfile = args.output
-            try:
-                if args.record_separator:
-                    record_separator = args.record_separator
-            except:
-                record_separator = "\n\s+-"
-            try:
-                if args.field_separator:
-                    field_separator = args.field_separator
-            except:
-                field_separator = "\s+"
+        elif infile:
+            content = infile.read()
+            infile.close()
+        else:
+            sys.exit("No command line or help file given... Bye bye...")
+        try:
+            if args.record_separator:
+                record_separator = args.record_separator
+        except:
+            record_separator = "\n\s+-"
+        try:
+            if args.field_separator:
+                field_separator = args.field_separator
+        except:
+            field_separator = "\s+"
+        if infile:
+            mybigdict = GetProgHelpParam(content, record_separator, \
+            field_separator, True)
+        else:
             mybigdict = GetProgHelpParam(execline, record_separator, \
             field_separator, False)
-            vprog, vtool = GetVersion(mybigdict["progfullname"])
-            catname = raw_input("In what category would you like to "+\
-            "include this Tool[[NGS]|Phylogenomics|Population "+\
-            "Genetics|Population Dynamics|Ecological Modelling] :")
-            if not catname:
-                catname = "NGS"
-            while 1:
-                nb_paraph = raw_input("How many paragraph do you need"+\
-                " for your Web Form ?:")
-                try:
-                    nb_paraph = int(nb_paraph)
-                    break
-                except:
-                    print("Sorry, not a number. Try again...\n")
+        vprog, vtool = GetVersion(mybigdict["progfullname"])
+        catname = raw_input("In what category would you like to "+\
+        "include this Tool[[NGS]|Phylogenomics|Population "+\
+        "Genetics|Population Dynamics|Ecological Modelling] :")
+        if not catname:
+            catname = "NGS"
+        while 1:
+            nb_paraph = raw_input("How many paragraph do you need"+\
+            " for your Web Form ?:")
+            try:
+                nb_paraph = int(nb_paraph)
+                break
+            except:
+                print("Sorry, not a number. Try again...\n")
 
-            PiseWrapper = XmlPise(mybigdict, vprog, vtool, catname, \
-            nb_paraph)
-            PiseWrapperFormat = PiseWrapper.createXml(fromwrapper)
-            outfile.write(PiseWrapperFormat)
-            outfile.close()
-        else:
-            sys.exit("No command line given... Bye bye...")
+        PiseWrapper = XmlPise(mybigdict, vprog, vtool, catname, \
+        nb_paraph)
+        PiseWrapperFormat = PiseWrapper.createXml(fromwrapper)
+        outfile.write(PiseWrapperFormat)
+        outfile.close()
+
+
+
     else:
         sys.exit("There is no valid action... Bye, bye...\n"+usage)
